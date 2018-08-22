@@ -1,0 +1,157 @@
+﻿@{
+    Layout = "~/Views/Shared/site.cshtml";
+    ViewBag.Title = "Read";
+}
+<link rel="stylesheet" type="text/css" href="~/H-ui/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="~/H-ui/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="~/lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="~/H-ui/h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="~/H-ui/h-ui.admin/css/style.css" />
+<script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>
+<script src="~/Scripts/vue.min.js"></script>
+<script src="~/Scripts/common.js"></script>
+<style>
+    body {
+        background: url(/New/images/geometry2.png) repeat;
+    }
+
+    .sandian {
+        white-space: nowrap;
+        /*max-width: 150px;*/
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+@using AncientBook.Models;
+@using System.Configuration;
+@{
+    BookViewModel bookViewModel = Model as BookViewModel;
+
+    string[] imgUris = bookViewModel.ImageUris;
+    string hideimgUris = bookViewModel.ImageUris != null ? string.Join(",", bookViewModel.ImageUris) : "";
+    var domain = ConfigurationManager.AppSettings["Domain"]
+;}
+<div style="width:50px;overflow:hidden;">
+</div>
+@*<div class="cl" style=" background-color:#5bacb6;text-align: center;padding: 8px;">
+        <dl style="color:#fff">
+            <dt>
+                <span class="f-18">@bookViewModel.Title</span>
+            </dt>
+            <dd class="pt-10 f-12" style="margin-left:0"></dd>
+        </dl>
+    </div>*@
+<div class="pd-20" style="padding-top:0px">
+    <input id="hidden_imgUris" type="hidden" value="@hideimgUris" />
+    <table class="table">
+        <tbody>
+            <tr>
+                <td width="30%" style="">
+                    <div style="width:100%;text-align:center;overflow:hidden;">
+                        <a href="javascript:void(0)" class="sandian" title="@bookViewModel.Title" style="font-size:18px;background-color:none;cursor:pointer;width:90%;display:block">@bookViewModel.Title</a>
+                    </div>
+                </td>
+                <td width="5%">
+                    <a class="btn btn-primary radius" id="jump_front" href="javascript:picJump(-1);"><i class="Hui-iconfont">&#xe67d;</i></a>
+                </td>
+                <td width="5%">
+                    <a class="btn btn-primary radius" id="img_bigger" href="javascript:imgToSize(50);"><i class="Hui-iconfont">&#xe600;</i></a>
+                </td>
+                <td width="5%">
+                    <a class="btn btn-primary radius" id="img_smaller" href="javascript:imgToSize(-50);"><i class="Hui-iconfont">&#xe6a1;</i></a>
+                </td>
+                <td width="5%">
+                    <a class="btn btn-primary radius" id="jump_behind" href="javascript:picJump(1);"><i class="Hui-iconfont">&#xe63d;</i></a>
+                </td>
+                <td width="30%">
+                    <input id="bookPageIndex" type="text" name="bookPageIndex" value="@(imgUris.Length > 0 ? "1" : "0")">/ 共 @imgUris.Count()张 
+                    <a class="btn btn-primary radius" id="jumpToPage" href="javascript:void(0);">
+                        <i class="Hui-iconfont">&#xe603;</i>跳转到
+                    </a>
+                </td>
+                <td><a class="btn btn-primary radius" href="@domain/Article/DownLoadImages_front/@bookViewModel.BookUid?title=@bookViewModel.Title"><i class="Hui-iconfont">&#xe641;</i>下载</a></td>
+            </tr>
+        </tbody>
+    </table>
+    @{
+        if (imgUris.Length >0)
+        {
+            <div align="center"><img id='Imgbox' src='@(domain+imgUris.FirstOrDefault())' style="position:relative; zoom:100%; cursor:move;" /></div>
+        }
+        else
+        {
+            <div align="center">
+
+            </div>
+        }
+    }
+    
+</div>
+<script type="text/javascript">
+    var imgCount = parseInt("@imgUris.Count()");
+
+    var size = 0;
+    var value = 0;
+    var array = $("#hidden_imgUris").val().split(',');;
+
+    function picJump(pagePlus)
+    {
+        var currentPageIndex = parseInt($("#bookPageIndex").val())-1;
+        var toIndex = currentPageIndex + pagePlus;
+        if (toIndex < 0) {
+            toIndex = 0;
+        }
+        if (toIndex > imgCount - 1) {
+            toIndex = imgCount - 1;
+        }
+        $("#Imgbox").prop("src", "@domain" + array[toIndex]);
+        $("#bookPageIndex").val(toIndex+1);
+    }
+    $("#jumpToPage").on("click", function () {
+        var pageIndex = parseInt($("#bookPageIndex").val())-1;
+        if (pageIndex < 0) {
+            pageIndex = 0;
+        }
+        if (pageIndex > imgCount - 1) {
+            pageIndex = imgCount - 1;
+        }
+        $("#Imgbox").attr("src", "@domain"+array[pageIndex]);
+        $("#bookPageIndex").val(pageIndex+1);
+    })
+    function picJumpTo()
+    {
+        var pageIndex = parseInt($("#bookPageIndex").val())-1;
+        if (pageIndex < 0) {
+            pageIndex = 0;
+        }
+        if (pageIndex > imgCount - 1) {
+            pageIndex = imgCount - 1;
+        }
+        $("#Imgbox").attr("src", "@domain"+array[pageIndex]);
+        $("#bookPageIndex").val(pageIndex+1);
+    }
+
+    //放大缩小图片
+    function imgToSize(size) {
+        var img = $("#Imgbox");
+        var oWidth = img.width(); //取得图片的实际宽度
+        var oHeight = img.height(); //取得图片的实际高度
+        if ((size < 0) && (oWidth <= 100 || oHeight <= 100)) {
+            if (size > 0){
+                img.width(oWidth + size);
+                img.height(oHeight + size / oWidth * oHeight);
+            }
+        } else {
+            img.width(oWidth + size);
+            img.height(oHeight + size / oWidth * oHeight);
+        }
+
+    }
+
+    function rotateLeftOrRight(rotateValue) {
+        value = value + rotateValue;
+        console.log(value);
+        $("#Imgbox").rotate({ animateTo: value });
+    }
+
+</script>

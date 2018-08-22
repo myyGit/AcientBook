@@ -1,0 +1,91 @@
+﻿.ulShare{
+    padding: 0;
+    margin: 0 0 10px 25px;
+}
+.ulShare .ulShare {
+    margin-bottom: 0;
+}
+li{
+    line-height: 20px;
+}
+
+.treeShare {
+    min-height:20px;
+    padding:19px;
+    margin-bottom:20px;
+    background-color:#fbfbfb;
+    border:1px solid #999;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    -webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05)
+}
+.ulShare li {
+    list-style-type:none;
+    margin:0;
+    padding:10px 5px 0 5px;
+    position:relative
+}
+.treeShare li::before, .treeShare li::after {
+    content:'';
+    left:-20px;
+    position:absolute;
+    right:auto
+}
+.treeShare li::before {
+    border-left:1px solid #999;
+    bottom:50px;
+    height:100%;
+    top:0;
+    width:1px
+}
+.treeShare li::after {
+    border-top:1px solid #999;
+    height:20px;
+    top:25px;
+    width:25px
+}
+.treeShare li span {
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border:1px solid #999;
+    border-radius:5px;
+    display:inline-block;
+    padding:3px 8px;
+    text-decoration:none
+}
+.treeShare li span>[class*=" icon-"]{
+    background-image:url("../img/glyphicons-halflings-white.png")
+
+}
+.treeShare li.parent_li>span {
+    cursor:pointer
+}
+.treeShare>ul>li::before, .treeShare>ul>li::after {
+    border:0
+}
+.treeShare li:last-child::before {
+    height:30px
+}
+.treeShare li.parent_li>span:hover, .treeShare li.parent_li>span:hover+ul li span {
+    background:#eee;
+    border:1px solid #94a0b4;
+    color:#000
+}
+ .icon-glass{background-position:0 0}
+.icon-plus-sign{background-position:0 -96px}
+.icon-minus-sign{background-position:-24px -96px}
+.icon-leaf{background-position:-48px -120px}
+.treeShare li span>[class^="icon-"], [class*=" icon-"] {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-top: 1px;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-image: url(../img/glyphicons-halflings.png);
+    /*background-position: 14px 14px;*/
+    background-repeat: no-repeat;
+}

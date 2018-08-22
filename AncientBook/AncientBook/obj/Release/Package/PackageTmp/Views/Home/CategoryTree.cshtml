@@ -1,0 +1,119 @@
+﻿@{
+    Layout = null;
+}
+@using AncientBook.Data;
+<link href="~/css/style.css" rel="stylesheet" />
+<style>
+    #treeList2 {
+        min-width: 270px;
+        float: left;
+        padding-right: 0px;
+        padding-top: 0px;
+        padding-left: 0px;
+        padding-bottom: 0px;
+    }
+</style>
+@{
+    var list = Session["treeList"] == null ? new List<TB_Category>() : (List<TB_Category>)Session["treeList"];
+    var result = Common.JSONSerializer.ToJSONString(list);
+}
+
+<div id="treelistresult" style="display:none">
+    @result
+</div>
+<div id="treeList2" class="treeShare wellShare" style="margin-left:3%">
+    <ul class="ulShare" style="margin-bottom:0px">
+        <li><span><i class="icon-leaf"></i><a class="caty" name="-1" style="color:#337ab7">查看全部分类</a></span><a></a></li>
+    </ul>
+</div>
+<script type="text/javascript">
+			var menus = '';
+			$(function () {
+			    var menuArry = JSON.parse($("#treelistresult").text());
+	            GetDataInfo(menuArry);
+	            $("#treeList2").append(menus);
+	        });
+			$(function(){
+			    $('.treeShare li:has(ul)').addClass('parent_li') ; //.find(' > span').attr('title', 'Collapse this branch');
+			   //  $('.treeShare li.parent_li > span').parent('li.parent_li').find(' > ul > li').hide('fast')
+			    $('.treeShare li.parent_li > ul > li').each(function (e) {
+			        $(this).find("a[name='" + categoryId + "']").parents(".ulShare").show('fast')
+			    })
+			    $('.treeShare li.parent_li > span').on('click', function (e) {
+			        var children = $(this).parent('li.parent_li').find(' > ul > li');
+			        if (children.is(":visible")) {
+			            children.hide('fast');
+			            $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
+			        } else {
+			            children.show('fast');
+			            $(this).attr('title', 'Collapse this branch').find(' > i').addClass('icon-minus-sign').removeClass('icon-plus-sign');
+			        }
+			        e.stopPropagation();
+			    });
+			    $(".caty").on("click", function (obj) {
+			        var name = $(this).attr("name");
+			        var categoryId = GetQueryString("categoryId");
+			        var pageIndex = GetQueryString("pageIndex");
+			        var url = "/Article/List?categoryId=";
+			        url = url + name;
+			        var keyword = $("#keywordIpt").val();
+			        $("#categoryId").val(name);
+			        $(".caty").attr("style", "color:#337ab7");
+			        $(this).attr("style", "color:red");
+			        $(this).attr("href", url);
+			    })
+			    var categoryId = GetQueryString("categoryId");
+			    if(categoryId == ""){
+			        categoryId = -1;
+			        $(".ulShare").eq(1).children("li.parent_li").siblings(".parent_li").find(".ulShare li").attr("style", "display:none")
+			        $(".ulShare").eq(1).children("li.parent_li").siblings(".parent_li").find("i").removeClass("icon-minus-sign").addClass("icon-plus-sign")
+			        $(".ulShare").eq(1).children("li.nochild").siblings(".parent_li").find("i").removeClass("icon-minus-sign").addClass("icon-plus-sign")
+			        $(".ulShare").eq(1).children("li.nochild").siblings(".parent_li").find(".ulShare li").attr("style", "display:none")
+			    }
+			    else if (categoryId != null) {
+			        console.log(categoryId);
+			        $("[name='" + categoryId + "']").parents().show();
+			        $("[name='" + categoryId + "']").siblings().show();
+			        $("[name='" + categoryId + "']").attr("style", "color:red");
+			        $("[name='" + categoryId + "']").addClass("bbb");
+                    $(".bbb").parents("li.parent_li").siblings(".parent_li").find(".ulShare li").attr("style", "display:none")
+                    $(".bbb").parents("li.parent_li").siblings(".parent_li").find("i").removeClass("icon-minus-sign").addClass("icon-plus-sign")
+                    $(".bbb").parents("li.nochild").siblings(".parent_li").find("i").removeClass("icon-minus-sign").addClass("icon-plus-sign")
+                    $(".bbb").parents("li.nochild").siblings(".parent_li").find(".ulShare li").attr("style", "display:none")
+			    }
+			});
+			function GetQueryString(name) {
+			    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+			    var r = window.location.search.substr(1).match(reg);  //获取url中"?"符后的字符串并正则匹配              
+			    var context = "";
+			    if (r != null)
+			        context = r[2];
+			    reg = null;
+			    r = null;
+			    return context == null || context == "" || context == "undefined" ? "" : context;
+			}
+	        function GetDataInfo(arr)
+        	{
+	            if (arr != null) {
+	               menus += '<ul class="ulShare">';
+	                for (var i = 0; i < arr.length; i++) {
+	                       
+	                    if (arr[i].Children != [] && arr[i].Children != null) {
+	                        menus += '<li>';
+		                        menus += '<span><i class="icon-minus-sign"></i> ' + arr[i].CategoryName + '</span><a></a>';
+	                    } else {
+	                            menus += '<li class="nochild">';
+		                        menus += '<span><i class="icon-leaf"></i><a class="caty" name="' + arr[i].CategoryId + '"> ' + arr[i].CategoryName + '</a></span><a></a>';
+		                    }
+
+		                    if (arr[i].Children != [] && arr[i].Children != null) {
+		                        GetDataInfo(arr[i].Children);
+		                    }
+		                    menus += '</li>';
+	                }
+	                menus += '</ul>';
+	            }
+
+	        
+	        }
+</script>

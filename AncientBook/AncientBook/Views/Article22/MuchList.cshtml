@@ -1,0 +1,172 @@
+﻿@{
+    Layout = "~/Views/Shared/site.cshtml";
+}
+@using Webdiyer.WebControls.Mvc;
+@using AncientBook.Models;
+@{
+    PagedList<BookViewModel> bookList = Model as PagedList<BookViewModel>;
+    int count = bookList == null ? 0 : bookList.Count;
+    var user = Session["uid"] == null ? 0 : 1;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>古籍列表</title>
+    <link rel="stylesheet" href="~/New/css/style.css" />
+    <link href="~/css/style1.css" rel="stylesheet" />
+    <link href="~/css/main.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/vue.min.js"></script>
+    <script src="~/Scripts/common.js"></script>
+    <script>
+            var html = "";
+        function Cancle() {
+            window.location.href = "@Url.Action("List", "Article")";
+        }
+        window.onresize = function () {
+            var height = window.innerHeight;
+            $("body").height(height);
+        }
+        $(function () {
+            var height = window.innerHeight;
+            $("body").height(height);
+
+            $(".DropdownMenuBackground").each(
+                function () {
+                    ad_book_class($(this), 0);
+                }).css({ paddingLeft: "20px", width: "316px" });
+        })
+        function ChooseClass() {
+            if ($(".DropdownMenuBackground").css("display") == "block")
+                hideMenu();
+            $(".DropdownMenuBackground").toggle();
+        }
+        function showfield() {
+            $("#fieldItem").toggle();
+        }
+
+        function showBtn(isRemove) {
+            if (isRemove) {
+                $("#choose_class").val("none");
+                $("#addBtn").css("display", "none");
+                $("#secondinput").val("");
+                $("#secondcheck").val(0)
+            }
+            else {
+                $("#choose_class").val("inline");
+                $("#addBtn").css("display", "inline");
+            }
+        }
+        function checkvalue() {
+            var text = $("#firstinput").val();
+            if (text == "") {
+                alert("不能为空");
+                return false;
+            }
+            if ($("#addBtn").css("display") == "inline") {
+
+                text = $("#secondinput").val();
+                if (text == "") {
+                    alert("不能为空");
+                    return false;
+                }
+            }
+        }
+
+    </script>
+    <style>
+        #form {
+            margin: 0 auto;
+        }
+
+        body {
+            background: url(/New/images/geometry2.png) repeat;
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+            font-size: 14px;
+        }
+        /*body.style-3 {
+            height:100%;
+            background: #ffffff url(/New/images/geometry2.png) repeat;
+        }*/
+    </style>
+</head>
+<body>
+    <div class="header_t1" style="padding-top:50px">
+        <form id="form" class="form-horizontal col-sm-9 float-lt form" action="@Url.Action("MuchListTable","Article")" method="post">
+            <link href="/ad/easyui.css" rel="stylesheet" type="text/css" />
+            <input type="hidden" name="choose_class" id="choose_class" value="none" />
+            <div class="advanceSearch" style="margin-top:0">
+                <div class="advanceSearch_bd" style="box-shadow: 1px 1px 4px #CCCCCC;">
+                    <div class="a_tit">多条件检索</div>
+                    <fieldset id="criteriaFieldSet">
+                        <div class="blk5"></div>
+                        <div id="logicSearchTab">
+                            <div class="item fn-clear">
+                                <div class="feeds fl">
+                                    <select name="categoryId1" id="firstCheck" class="w120 fieldSlt">
+                                        <option value="0">全部</option>
+                                        <option value="1">书名</option>
+                                        <option value="2">责任者</option>
+                                        <option value="3">出版者</option>
+                                        <option value="4">朝代</option>
+                                        <option value="5">其他名称</option>
+                                    </select>
+                                </div>
+                                <div class="feeds fl">
+                                    <p>
+                                        <input name="title1" type="text" id="firstinput" maxlength="60" class="inputTxt w408" />
+                                    </p>
+                                </div>
+                                <div class="feeds fl">
+                                    <p>
+                                        <input type="button" class="formBtn" value="添加检索条件" onclick="showBtn(false)" id="addCondition" />
+                                    </p>
+                                </div>
+                            </div>
+                            <div id="addBtn" class="item fn-clear" style="display:none">
+                                <div>
+                                    <select name="searchType" id="secondcheck1" class="w120 fieldSlt">
+                                        <option value="1">与</option>
+                                        <option value="2">或</option>
+                                    </select>
+                                </div>
+                                <div class="feeds fl">
+                                    <select name="categoryId2" id="secondcheck" class="w120 fieldSlt">
+                                        <option value="0">全部</option>
+                                        <option value="1">书名</option>
+                                        <option value="2">责任者</option>
+                                        <option value="3">出版者</option>
+                                        <option value="4">朝代</option>
+                                        <option value="5">其他名称</option>
+                                    </select>
+                                </div>
+                                <div class="feeds fl">
+                                    <p>
+                                        <input name="title2" type="text" id="secondinput" maxlength="60" class="inputTxt w408" />
+                                    </p>
+                                </div>
+                                <div class="feeds fl">
+                                    <p>
+                                        <input type="button" class="formBtn" value="移除检索条件" onclick="showBtn(true)" id="removeCondition" />
+                                    </p>
+                                </div>
+                            </div>
+                            <div id="searchCriteriaBottom"></div>
+                        </div>
+                    </fieldset>
+                    <div class="btnWrap">
+                        <span class="s-btn-w1">
+                            <input type="submit" name="Button2" value="查  找" onclick="return checkvalue();" id="Button2" style="width: 125px;height: 36px;background-color:lightcoral;color:white" />
+                        </span>
+                        <span>
+                            <input type="button" name="Button3" value="取  消" onclick="Cancle();" id="Button2" style="width: 125px;height: 36px;background-color:lightcoral;color:white" />
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

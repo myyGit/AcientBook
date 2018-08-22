@@ -1,0 +1,434 @@
+﻿
+@using Webdiyer.WebControls.Mvc;
+@using AncientBook.Models;
+@using System.Configuration;
+<style>
+    .sandian {
+        white-space: nowrap;
+        max-width: 650px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .banben{           
+        max-width: 100px;
+        white-space: nowrap;
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .chubanzhe{
+        white-space: nowrap;
+        max-width: 350px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+    }
+    .chaodai{     
+        display: inline-block;
+        white-space: nowrap;
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+</style>
+@{
+    ArticleListModel bookList = Model as ArticleListModel;
+    int count = bookList == null ? 0 : bookList.Count;
+    var user = Session["uid"] == null ? 0 : 1;
+    var domain = ConfigurationManager.AppSettings["Domain"];
+}
+@{
+    string keyword = bookList.KeyWord == null ? null : bookList.KeyWord.ToString();
+    string jian = bookList.KeyJian == null ? "" : bookList.KeyJian.ToString();
+    string fan = bookList.KeyFan == null ? "" : bookList.KeyFan.ToString();
+    int id = bookList.CategoryId == null ? 0 : Convert.ToInt32(bookList.CategoryId);
+}
+<div class="fn-clear"></div>
+<style>
+    .item {
+        border-bottom: 1px dashed #cacaca;
+    }
+
+        .item:first-child {
+            border-bottom: 1px solid #cacaca;
+        }
+</style>
+<div id="loadingDiv" runat="server" style="display:none;text-align: center;padding-top:20px"><img src="~/images/loader.gif" width="50" /><h3 style="padding-bottom: 10px;font-size:20px">正在加载数据，请稍候...</h3></div>
+<div id="tableDataList" runat="server" class="bd" style="box-shadow:1px 1px 4px #CCCCCC">
+    <div id="correctionWords">
+        当前第 <strong style="color:red">@bookList.CurrentPageIndex</strong> 页 &nbsp;&nbsp;
+        共 <strong style="color:red">@bookList.PageTotalCount</strong> 页 &nbsp;&nbsp;
+        共计 <strong style="color:red">@bookList.Count</strong> 条
+    </div>
+    <div id="resultitem-box">
+        <div id="searchresult-items">
+            @{
+                if (bookList == null || bookList.Count <= 0)
+                {
+                    <div class="bd">
+                        <span class="err_tip" style="    padding-top: 40px;">抱歉，没有找到相关的结果</span>
+                    </div>
+                }
+                else
+                {
+                    int i = 1;
+                    foreach (var item in bookList.BooViewModelList)
+                    {
+                        #region 关键字标红
+                        switch (id)
+                        {
+                            case 0: //全部
+                                item.Title = (string.IsNullOrEmpty(item.Title) || string.IsNullOrEmpty(jian)) ? item.Title : item.Title.ToString().Replace(jian, "<span style=\"color:red;\">" + jian + "</span>");
+                                item.Title = (string.IsNullOrEmpty(item.Title) || string.IsNullOrEmpty(fan)) ? item.Title : item.Title.ToString().Replace(fan, "<span style=\"color:red;\">" + fan + "</span>");
+                                item.Title2 = (string.IsNullOrEmpty(item.Title2) || string.IsNullOrEmpty(jian)) ? item.Title2 : item.Title2.ToString().Replace(jian, "<span style=\"color:red;\">" + jian + "</span>");
+                                item.Title2 = (string.IsNullOrEmpty(item.Title2) || string.IsNullOrEmpty(fan)) ? item.Title2 : item.Title2.ToString().Replace(fan, "<span style=\"color:red;\">" + fan + "</span>");
+                                item.Publisher = (string.IsNullOrEmpty(item.Publisher) || string.IsNullOrEmpty(jian)) ? item.Version : item.Publisher.ToString().Replace(jian, "<span style=\"color:red;\">" + jian + "</span>");
+                                item.Publisher = (string.IsNullOrEmpty(item.Publisher) || string.IsNullOrEmpty(fan)) ? item.Version : item.Publisher.ToString().Replace(fan, "<span style=\"color:red;\">" + fan + "</span>");
+                                item.Version = (string.IsNullOrEmpty(item.Version) || string.IsNullOrEmpty(jian)) ? item.Version : item.Version.ToString().Replace(jian, "<span style=\"color:red;\">" + jian + "</span>");
+                                item.Version = (string.IsNullOrEmpty(item.Version) || string.IsNullOrEmpty(fan)) ? item.Version : item.Version.ToString().Replace(fan, "<span style=\"color:red;\">" + fan + "</span>");
+                                item.CategoryName = (string.IsNullOrEmpty(item.CategoryName) || string.IsNullOrEmpty(jian)) ? item.CategoryName : item.CategoryName.ToString().Replace(jian, "<span style=\"color:red;\">" + jian + "</span>");
+                                item.CategoryName = (string.IsNullOrEmpty(item.CategoryName) || string.IsNullOrEmpty(fan)) ? item.CategoryName : item.CategoryName.ToString().Replace(fan, "<span style=\"color:red;\">" + fan + "</span>");
+                                item.Functionary = (string.IsNullOrEmpty(item.Functionary) || string.IsNullOrEmpty(jian)) ? item.Functionary : item.Functionary.ToString().Replace(jian, "<span style=\"color:red;\">" + jian + "</span>");
+                                item.Functionary = (string.IsNullOrEmpty(item.Functionary) || string.IsNullOrEmpty(fan)) ? item.Functionary : item.Functionary.ToString().Replace(fan, "<span style=\"color:red;\">" + fan + "</span>");
+                                item.Dynasty = (string.IsNullOrEmpty(item.Dynasty) || string.IsNullOrEmpty(jian)) ? item.Dynasty : item.Dynasty.ToString().Replace(jian, "<span style=\"color:red;\">" + jian + "</span>");
+                                item.Dynasty = (string.IsNullOrEmpty(item.Dynasty) || string.IsNullOrEmpty(fan)) ? item.Dynasty : item.Dynasty.ToString().Replace(fan, "<span style=\"color:red;\">" + fan + "</span>");
+                                break;
+                            case 1: //书名
+                                item.Title = (string.IsNullOrEmpty(item.Title) || string.IsNullOrEmpty(jian)) ? item.Title : item.Title.ToString().Replace(jian, "<span style=\"color:red;\">" + jian + "</span>");
+                                item.Title = (string.IsNullOrEmpty(item.Title) || string.IsNullOrEmpty(fan)) ? item.Title : item.Title.ToString().Replace(fan, "<span style=\"color:red;\">" + fan + "</span>");
+                                break;
+                            case 2: //责任者
+                                item.Functionary = (string.IsNullOrEmpty(item.Functionary) || string.IsNullOrEmpty(jian)) ? item.Functionary : item.Functionary.ToString().Replace(jian, "<span style=\"color:red;\">" + jian + "</span>");
+                                item.Functionary = (string.IsNullOrEmpty(item.Functionary) || string.IsNullOrEmpty(fan)) ? item.Functionary : item.Functionary.ToString().Replace(fan, "<span style=\"color:red;\">" + fan + "</span>");
+                                break;
+                            case 3: //出版者
+                                item.Publisher = (string.IsNullOrEmpty(item.Publisher) || string.IsNullOrEmpty(jian)) ? item.Version : item.Publisher.ToString().Replace(jian, "<span style=\"color:red;\">" + jian + "</span>");
+                                item.Publisher = (string.IsNullOrEmpty(item.Publisher) || string.IsNullOrEmpty(fan)) ? item.Version : item.Publisher.ToString().Replace(fan, "<span style=\"color:red;\">" + fan + "</span>");
+                                break;
+                            case 4: //朝代
+                                item.Dynasty = (string.IsNullOrEmpty(item.Dynasty) || string.IsNullOrEmpty(jian)) ? item.Dynasty : item.Dynasty.ToString().Replace(jian, "<span style=\"color:red;\">" + jian + "</span>");
+                                item.Dynasty = (string.IsNullOrEmpty(item.Dynasty) || string.IsNullOrEmpty(fan)) ? item.Dynasty : item.Dynasty.ToString().Replace(fan, "<span style=\"color:red;\">" + fan + "</span>");
+                                break;
+                            case 5: //其他名称
+                                item.Title2 = (string.IsNullOrEmpty(item.Title2) || string.IsNullOrEmpty(jian)) ? item.Title2 : item.Title2.ToString().Replace(jian, "<span style=\"color:red;\">" + jian + "</span>");
+                                item.Title2 = (string.IsNullOrEmpty(item.Title2) || string.IsNullOrEmpty(fan)) ? item.Title2 : item.Title2.ToString().Replace(fan, "<span style=\"color:red;\">" + fan + "</span>");
+                                break;
+                            default:
+                                break;
+                        }
+
+                        #endregion
+                        <div class="item" style="border-bottom: 1px dashed #cacaca;">
+                            <div class="num" style="margin-top:10px;margin-right:4px;">@((bookList.CurrentPageIndex - 1) * bookList.PageSize + i).</div>
+                            <div class="info" extended="false">
+                                <h4>
+                                    <span class="fr otherFormat">
+                                        <a style="text-decoration:none" class="look formBtn" href="javascript:void(0)" name="@item.BookUid" target="_blank" title="阅读"><i class="Hui-iconfont">&#xe720;</i>阅读</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <a style="text-decoration:none" class="down formBtn" name="@item.BookUid" data-text="@item.Title" href="javascript:void(0)" title="下载"><i class="Hui-iconfont">&#xe641;</i>下载</a>
+                                    </span>
+                                    <a style="cursor:pointer" class="text-primary look sandian" href="javascript:void(0)" target="_blank" name="@item.BookUid" title="查看">
+                                        @Html.Raw(item.Title.ToString())
+                                    </a>
+                                </h4>
+                                <p class="sandian">其他题名：<em>@Html.Raw(item.Title2.ToString())</em>	</p>
+                                <p>
+                                    <span class="pubDate">分类：<em>@Html.Raw(item.CategoryName.ToString())</em>	</span>
+                                    <span class="pub">责任者：<em>@Html.Raw(item.Functionary.ToString())</em></span>
+                                    <span class="pub">卷数：<em>@item.Volume</em></span>
+                                </p>
+                                <p>
+
+                                </p>
+                                <p>
+                                    <span class="pubDate banben">版本：<em title="@Html.Raw(item.Version.ToString())">@Html.Raw(item.Version.ToString())</em></span>
+                                    <span class="pub chubanzhe">出版者：<em title="@Html.Raw(item.Publisher.ToString())">@Html.Raw(item.Publisher.ToString())</em></span>
+                                    <span class="pub chaodai">朝代：<em title="@Html.Raw(item.Dynasty.ToString())">@Html.Raw(item.Dynasty.ToString())</em></span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="lineDashed"></div>
+                        i++;
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+@{
+    var url = "";
+    List<string> list = new List<string>();
+    if (!(bookList.CategoryId == 0 || bookList.CategoryId == -1))
+    {
+        list.Add("categoryId=" + bookList.CategoryId);
+    }
+    else if (!string.IsNullOrEmpty(bookList.KeyWord))
+    {
+        list.Add("keyWord=" + bookList.KeyWord);
+    }
+    if (list.Count >0)
+    {
+        url = string.Join("&",list);
+        url = url + "&";
+    }
+}
+<ul class="pagination" style="float:right">
+    @{
+        bool isLastDisabled = false;
+        if (bookList.CurrentPageIndex + 1 > bookList.PageTotalCount)
+        {
+            isLastDisabled = true;
+        }
+
+    }
+    @if (bookList.PageTotalCount <= 5 && bookList.BooViewModelList.Count > 0)
+    {
+        <li class="@(bookList.CurrentPageIndex == 1 ?　"disabled" : "") ">
+            <a href="@(bookList.CurrentPageIndex == 1 ? "javascript:void(0)" : "/Article/List?"+url+"pageIndex=1")">首页</a>
+        </li>
+        <li class="@(bookList.CurrentPageIndex == 1 ?　"disabled" : "") ">
+            <a href="@(bookList.CurrentPageIndex == 1 ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + (bookList.CurrentPageIndex - 1))">上一页</a>
+        </li>
+        for (int i = 1; i <= bookList.PageTotalCount; i++)
+        {
+            <li class="@(bookList.CurrentPageIndex == i ? "active" : "") ">
+                <a href="@(bookList.CurrentPageIndex == i ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + i)">@i</a>
+            </li>
+        }
+        
+        <li class="@(isLastDisabled ? "disabled" : "") ">
+            <a href="@( isLastDisabled ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + (bookList.CurrentPageIndex + 1))">下一页</a>
+        </li>
+        <li class="@(isLastDisabled ? "disabled" : "") ">
+            <a href="@(isLastDisabled ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + bookList.PageTotalCount)">末页</a>
+        </li>
+    }
+    else
+    {
+        if (bookList.CurrentPageIndex == 1 && bookList.BooViewModelList.Count > 0)
+        {
+            <li class="@(bookList.CurrentPageIndex == 1 ?　"disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == 1 ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=1")">首页</a>
+            </li>
+            <li class="@(bookList.CurrentPageIndex == 1 ?　"disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == 1 ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + (bookList.CurrentPageIndex - 1))">上一页</a>
+            </li>
+            <li class="active">
+                <a href="javascript:void(0)">@bookList.CurrentPageIndex</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex + 1)">@(bookList.CurrentPageIndex + 1)</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex + 2)">@(bookList.CurrentPageIndex + 2)</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex + 3)">@(bookList.CurrentPageIndex + 3)</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex + 4)">@(bookList.CurrentPageIndex + 4)</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex + 5)">...</a>
+            </li>
+            <li class="@(bookList.CurrentPageIndex == bookList.PageTotalCount ?　"disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == bookList.PageTotalCount ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + (bookList.CurrentPageIndex + 1))">下一页</a>
+            </li>
+            <li class="@(bookList.CurrentPageIndex == bookList.PageTotalCount ? "disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == bookList.PageTotalCount ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + bookList.PageTotalCount)">末页</a>
+            </li>
+        }
+        else if (bookList.CurrentPageIndex == 2)
+        {
+            <li class="@(bookList.CurrentPageIndex == 1 ?　"disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == 1 ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=1")">首页</a>
+            </li>
+            <li class="@(bookList.CurrentPageIndex == 1 ?　"disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == 1 ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + (bookList.CurrentPageIndex - 1))">上一页</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex - 1)">@(bookList.CurrentPageIndex -1)</a>
+            </li>
+            <li class="active">
+                <a href="javascript:void(0)">@bookList.CurrentPageIndex</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex + 1)">@(bookList.CurrentPageIndex + 1)</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex+2)">@(bookList.CurrentPageIndex+2)</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex +3)">@(bookList.CurrentPageIndex +3)</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex +4)">@(bookList.CurrentPageIndex +4)</a>
+            </li>
+            <li class="@(bookList.CurrentPageIndex == bookList.PageTotalCount ?　"disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == bookList.PageTotalCount ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + (bookList.CurrentPageIndex + 1))">下一页</a>
+            </li>
+            <li class="@(bookList.CurrentPageIndex == bookList.PageTotalCount ? "disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == bookList.PageTotalCount ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + bookList.PageTotalCount)">末页</a>
+            </li>
+        }
+        else if (bookList.CurrentPageIndex == 3)
+        {
+            <li class="@(bookList.CurrentPageIndex == 1 ?　"disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == 1 ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=1")">首页</a>
+            </li>
+            <li class="@(bookList.CurrentPageIndex == 1 ?　"disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == 1 ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + (bookList.CurrentPageIndex - 1))">上一页</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex - 2)">@(bookList.CurrentPageIndex - 2)</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex - 1)">@(bookList.CurrentPageIndex - 1)</a>
+            </li>
+            <li class="active">
+                <a href="javascript:void(0)">@bookList.CurrentPageIndex</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex + 1)">@(bookList.CurrentPageIndex + 1)</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex +2)">@(bookList.CurrentPageIndex+2)</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex +3)">@(bookList.CurrentPageIndex+3)</a>
+            </li>
+            <li class="@(bookList.CurrentPageIndex == bookList.PageTotalCount ?　"disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == bookList.PageTotalCount ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + (bookList.CurrentPageIndex + 1))">下一页</a>
+            </li>
+            <li class="@(bookList.CurrentPageIndex == bookList.PageTotalCount ? "disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == bookList.PageTotalCount ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + bookList.PageTotalCount)">末页</a>
+            </li>
+        }
+        else if (bookList.CurrentPageIndex >= 4 && bookList.CurrentPageIndex != bookList.PageTotalCount)
+        {
+            <li class="@(bookList.CurrentPageIndex == 1 ?　"disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == 1 ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=1")">首页</a>
+            </li>
+            <li class="@(bookList.CurrentPageIndex == 1 ?　"disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == 1 ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + (bookList.CurrentPageIndex - 1))">上一页</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex - 3)">...</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex - 2)">@(bookList.CurrentPageIndex - 2)</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex - 1)">@(bookList.CurrentPageIndex - 1)</a>
+            </li>
+            <li class="active">
+                <a href="javascript:void(0)">@bookList.CurrentPageIndex</a>
+            </li>
+            if (bookList.CurrentPageIndex + 1 <= bookList.PageTotalCount)
+            {
+                <li>
+                    <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex+1)">@(bookList.CurrentPageIndex+1)</a>
+                </li>
+            }
+            if (bookList.CurrentPageIndex + 2 <= bookList.PageTotalCount)
+            {
+                <li>
+                    <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex +2)">@(bookList.CurrentPageIndex +2)</a>
+                </li>
+            }
+            if (bookList.CurrentPageIndex + 3 <= bookList.PageTotalCount)
+            {
+                <li>
+                    <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex +3)">...</a>
+                </li>
+            }
+            <li class="@(bookList.CurrentPageIndex == bookList.PageTotalCount ?　"disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == bookList.PageTotalCount ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + (bookList.CurrentPageIndex + 1))">下一页</a>
+            </li>
+            <li class="@(bookList.CurrentPageIndex == bookList.PageTotalCount ? "disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == bookList.PageTotalCount ? "javascript:void(0)" : "/Article/List?" + url + "pageIndex=" + bookList.PageTotalCount)">末页</a>
+            </li>
+        }
+        else if (bookList.CurrentPageIndex == bookList.PageTotalCount)
+        {
+            <li class="@(bookList.CurrentPageIndex == 1 ?　"disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == 1 ? "javascript:void(0)" : "/Article/MuchListTablePage?" + url + "pageIndex=1")">首页</a>
+            </li>
+            <li class="@(bookList.CurrentPageIndex == 1 ?　"disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == 1 ? "javascript:void(0)" : "/Article/MuchListTablePage?" + url + "pageIndex=" + (bookList.CurrentPageIndex - 1))">上一页</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex - 5)">...</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex - 4)">@(bookList.CurrentPageIndex - 4)</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex - 3)">@(bookList.CurrentPageIndex - 3)</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex - 2)">@(bookList.CurrentPageIndex - 2)</a>
+            </li>
+            <li>
+                <a href="/Article/List?@(url)pageIndex=@(bookList.CurrentPageIndex - 1)">@(bookList.CurrentPageIndex - 1)</a>
+            </li>
+            <li class="active">
+                <a href="javascript:void(0)">@bookList.CurrentPageIndex</a>
+            </li>
+            <li class="@(bookList.CurrentPageIndex == bookList.PageTotalCount ?　"disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == bookList.PageTotalCount ? "javascript:void(0)" : "/Article/MuchListTablePage?" + url + "pageIndex=" + (bookList.CurrentPageIndex + 1))">下一页</a>
+            </li>
+            <li class="@(bookList.CurrentPageIndex == bookList.PageTotalCount ? "disabled" : "") ">
+                <a href="@(bookList.CurrentPageIndex == bookList.PageTotalCount ? "javascript:void(0)" : "/Article/MuchListTablePage?" + url + "pageIndex=" + bookList.PageTotalCount)">末页</a>
+            </li>
+        }
+
+
+    }
+</ul>
+
+<!--请在下方写此页面业务相关的脚本-->
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript">
+    var user = "@(Session["uid"] == null ? "" : "1")";
+    var domain = "@ConfigurationManager.AppSettings["Domain"]";
+        $(document).ready(function () {
+            $(".look").click(function () {
+                var id = this.getAttribute('name');
+                if (user == "") {
+                    alert("亲～～请先登录哦");
+                } else {
+                    $(this).attr("href", "/Article/Read/" + id);
+                }
+
+            })
+            $(".down").click(function () {
+                var id = this.getAttribute('name');
+                var title = this.getAttribute('data-text');
+                if (user == "") {
+                    alert("亲～～请先登录哦");
+                } else {
+                    $(this).attr("href", "@domain/Article/DownLoadImages_front/" + id + "?title=" + title);
+                   // window.location.href = "/Article/DownLoadImages/" + id + "?title=" + title;
+                }
+
+            })
+        })
+        /*古籍-阅读*/
+        function article_show(title, url, w, h) {
+            var index = layer.open({
+                type: 2,
+                title: title,
+                content: url
+            });
+            layer.full(index);
+        }
+
+</script>
+
+<!--_footer 作为公共模版分离出去-->
+@*<script type="text/javascript" src="~/lib/jquery/1.9.1/jquery.min.js"></script>*@
+<script type="text/javascript" src="~/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="~/H-ui/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="~/H-ui//h-ui.admin/js/H-ui.admin.js"></script>
+<!--/_footer 作为公共模版分离出去-->

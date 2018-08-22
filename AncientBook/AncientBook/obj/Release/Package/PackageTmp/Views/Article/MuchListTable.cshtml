@@ -1,0 +1,140 @@
+﻿@{
+    Layout = "~/Views/Shared/site.cshtml";
+}
+@using AncientBook.Models;
+@using Webdiyer.WebControls.Mvc;
+@{
+    MuchListTableModel bookList = Model as MuchListTableModel;
+    var user = Session["uid"] == null ? 0 : 1;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>多条件搜索</title>
+    <link href="~/css/base.css" rel="stylesheet" />
+    <link href="~/css/main.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="~/lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/MvcPager.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <style>
+        body {
+            background: url(/New/images/geometry2.png) repeat;
+            min-height: 670px;
+        }
+
+        #searchForm {
+            width: 100%;
+        }
+        #treeList2 {
+            margin-top: 30px;
+            margin-left: 5%;
+        }
+    </style>
+</head>
+<body class="body">
+    @{
+        var query = bookList.Query == null ? "" : bookList.Query;
+        var searchType = bookList.SearchType == null ? "与" : (Convert.ToInt32(bookList.SearchType) == 2 ? "或" : "与");
+        string[] a = { };
+        if (!string.IsNullOrEmpty(query))
+        {
+            a = query.Split(',');
+        }
+    }
+    <div style="width: 100%; margin: 0 auto;padding-top: 30px;">
+        @using (Ajax.BeginForm("MuchListTable", "Article", new RouteValueDictionary { { "id", "" } },
+                                        new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "list", InsertionMode = InsertionMode.Replace }, new RouteValueDictionary { { "id", "searchForm" } }))
+        {
+            <div class="input-group" style="width:100%;display:inline-table;">
+                <div class="advanceSearch_bd" style="border: 1px solid #ededed;width: 740px;margin:0 auto;box-shadow:1px 1px 4px #CCCCCC">
+                    <div class="a_tit" style="width: 702px;">
+                        检索条件
+                        <a href="@Url.Action("MuchList","Article")" class="" style="text-decoration:underline">返回</a>
+                    </div>
+                    <fieldset id="criteriaFieldSet" style="background-color:white;">
+                        <div class="blk5"></div>
+                        <div id="logicSearchTab">
+                            <div class="item fn-clear">
+                                @if (a.Length >= 2 && !string.IsNullOrEmpty(a[1]))
+                                {
+                                    var type = "";
+                                    switch (Convert.ToInt32(a[0]))
+                                    {
+                                        case 0: type = "全部"; break;
+                                        case 1: type = "书名"; break;
+                                        case 2: type = "责任者"; break;
+                                        case 3: type = "出版者"; break;
+                                        case 4: type = "朝代"; break;
+                                        case 5: type = "其他名称"; break;
+                                        default:
+                                            type = "全部";
+                                            break;
+                                    }
+                                    <div style="float:left;margin-left:15px;">
+                                        1> 类别：<label style="color:red;">@type</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        关键字：<label style="color:red;">@a[1]</label>
+                                    </div>
+                                    <input type="hidden" name="categoryId1" value="@a[0]" />
+                                    <input type="hidden" name="title1" value="@a[1]" />
+                                }
+                                @if (a.Length >= 4 && !string.IsNullOrEmpty(a[3]))
+                                {
+                                    <div style="float:left;margin-left:100px;">
+                                        组合关系：<label style="color:red;">@searchType</label>
+                                    </div>
+                                }
+                                @if (a.Length >= 4 && !string.IsNullOrEmpty(a[3]))
+                                {
+                                    var type1 = "";
+                                    switch (Convert.ToInt32(a[2]))
+                                    {
+                                        case 0: type1 = "全部"; break;
+                                        case 1: type1 = "书名"; break;
+                                        case 2: type1 = "责任者"; break;
+                                        case 3: type1 = "出版者"; break;
+                                        case 4: type1 = "朝代"; break;
+                                        case 5: type1 = "其他名称"; break;
+                                        default:
+                                            type1 = "全部";
+                                            break;
+                                    }
+                                    <div style="float:right;margin-right:15px;">
+                                        2> 类别：<label style="color:red;">@type1</label> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        关键字：<label style="color:red;">@a[3]</label>
+                                    </div>
+                                    <input type="hidden" name="categoryId2" value="@a[2]" />
+                                    <input type="hidden" name="title2" value="@a[3]" />
+                                    <input type="hidden" name="searchType" value="@(bookList.SearchType)" />
+                                }
+                            </div>
+                            <div id="searchCriteriaBottom"></div>
+                        </div>
+                    </fieldset>
+                </div>
+
+            </div>
+        }
+        @*@{
+            Html.RenderAction("CategoryTree", "Home");
+        }*@
+        <div id="searchresult-list" style="width:740px;margin:0 auto">
+            <div id="list " class="gjResults" style="margin:0 auto;width: 740px;background-color: white;margin-top: 20px;">
+                @{
+                    Html.RenderPartial("_PartMuchTableList", bookList);
+                }
+            </div>
+        </div>
+    </div>
+        <script>
+            $(document).ready(function () {
+                var height = document.body.scrollHeight;
+                console.log(height);
+                $(".body").height(height)
+            })
+        </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>登录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Free HTML5 Template by FreeHTML5.co" />
+    <meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
+    <!-- Facebook and Twitter integration -->
+    <meta property="og:title" content="" />
+    <meta property="og:image" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:site_name" content="" />
+    <meta property="og:description" content="" />
+    <meta name="twitter:title" content="" />
+    <meta name="twitter:image" content="" />
+    <meta name="twitter:url" content="" />
+    <meta name="twitter:card" content="" />
+    <link href="~/New/css/animate.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/New/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/New/css/animate.css" />
+    <link rel="stylesheet" href="~/New/css/style.css" />
+    <!-- Modernizr JS -->
+    <script src="~/New/js/modernizr-2.6.2.min.js"></script>
+    <!-- FOR IE9 below -->
+    <!--[if lt IE 9]>
+    <script src="~/New/js/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        body.style-3 {
+            background: #ffffff url(/New/images/geometry2.png) repeat;
+        }
+
+        #Yanzhengma {
+            display: inline-block;
+        }
+
+        .aLink {
+            color: gray;
+            font-size: 12px;
+        }
+
+            .aLink:hover {
+                color: #A94442;
+            }
+    </style>
+</head>
+<body class="style-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <!-- Start Sign In Form -->
+                <form action="/" method="post" class="fh5co-form animate-box" data-animate-effect="fadeIn">
+                    <h2>登录</h2>
+                    <div class="form-group">
+                        <label for="username" class="sr-only">用户名</label>
+                        <input type="text" class="form-control" id="username" name="account" placeholder="用户名" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="sr-only">密码</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="密码" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="Yanzhengma" class="sr-only">验证码</label>
+                        <input type="text" class="form-control" name="validateCode" id="Yanzhengma" style="width:65%;display:inline-block;" placeholder="验证码" autocomplete="off">
+                        <img id="img_validateCode" src="@Url.Action("GetValidateCode")" onclick="this.src = this.src+'/'" height="50px" width="30%" />
+
+                    </div>
+                    <div class="form-group">
+                        <label for="remember" style="display:none"><input type="checkbox" id="remember" checked name="online" value="0"> 记住我</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="button" value="登录" class="btn btn-primary" onclick="Login()">
+                        <span id="sp_result" style="color:red;font-size:medium"></span>
+                    </div>
+                    <div class="form-group" style="text-align: center;">
+                        <small>
+
+                        </small>
+                    </div>
+                </form>
+                <!-- END Sign In Form -->
+            </div>
+        </div>
+        <div class="row" style="padding-top: 60px; clear: both;">
+            <div class="col-md-12 text-center"><p><small></small></p></div>
+        </div>
+    </div>
+    <!-- jQuery -->
+    <script src="~/New/js/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="~/New/js/bootstrap.min.js"></script>
+    <!-- Placeholder -->
+    <script src="~/New/js/jquery.placeholder.min.js"></script>
+    <!-- Waypoints -->
+    <script src="~/New/js/jquery.waypoints.min.js"></script>
+    <!-- Main JS -->
+    <script src="~/New/js/main.js"></script>
+    <script>
+        function changeCode() {
+            document.getElementById("img_validateCode").src = document.getElementById("img_validateCode").src + '?';
+        }
+        function Login() {
+            console.log()
+            if ($("#remember").is(':checked')) {
+                $("#remember").val(1);
+            } else {
+                $("#remember").val(0);
+            }
+            if ($("#Yanzhengma").val() == "验证码:" || $("#Yanzhengma").val() == "") {
+                $("#sp_result").html("验证码不能为空！");
+            } else {
+                $.ajax({
+                    type: 'post',
+                    url: '/Account/LoginDeal',
+                    async: true,//异步
+                    dataType: 'json',
+                    headers:
+                    {
+                    },
+                    data:
+                    {
+                        "account": $("#username").val(),
+                        "password": $("#password").val(),
+                        "validateCode": $("#Yanzhengma").val(),
+                        "online": $("#remember").val(),
+                    },
+                    beforeSend: function () {
+                        $("#sp_result").html("正在登录，请稍后～");
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        if (data == "登录成功") {
+                            $("#sp_result").html(data.msg);
+                            setTimeout(function () {
+                                window.location = "/Article/List";
+                            }, 500);
+                        } else {
+                            $("#sp_result").html(data);
+                            changeCode();
+                            $("#Yanzhengma").val("");
+                        }
+                    },
+                    error: function (data) {
+                        console.log(JSON.stringify(data));
+                    }
+                });//end Ajax
+            }
+        }
+    </script>
+</body>
+</html>
