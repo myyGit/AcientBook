@@ -27,3 +27,13 @@ F:\test古籍\AncientBook\AncientBook.Data\bin\Debug\EntityFramework.SqlServer.x
 F:\test古籍\AncientBook\AncientBook.Data\obj\Debug\AncientBook.Data.dll
 F:\test古籍\AncientBook\AncientBook.Data\obj\Debug\AncientBook.Data.pdb
 F:\test古籍\AncientBook\AncientBook.Data\obj\Debug\AncientBook.Data.csprojResolveAssemblyReference.cache
+F:\task\古籍\AncientBook\AncientBook.Data\bin\Debug\AncientBook.Data.dll.config
+F:\task\古籍\AncientBook\AncientBook.Data\bin\Debug\AncientBook.Data.dll
+F:\task\古籍\AncientBook\AncientBook.Data\bin\Debug\AncientBook.Data.pdb
+F:\task\古籍\AncientBook\AncientBook.Data\bin\Debug\EntityFramework.dll
+F:\task\古籍\AncientBook\AncientBook.Data\bin\Debug\EntityFramework.SqlServer.dll
+F:\task\古籍\AncientBook\AncientBook.Data\bin\Debug\EntityFramework.xml
+F:\task\古籍\AncientBook\AncientBook.Data\bin\Debug\EntityFramework.SqlServer.xml
+F:\task\古籍\AncientBook\AncientBook.Data\obj\Debug\AncientBook.Data.csprojResolveAssemblyReference.cache
+F:\task\古籍\AncientBook\AncientBook.Data\obj\Debug\AncientBook.Data.dll
+F:\task\古籍\AncientBook\AncientBook.Data\obj\Debug\AncientBook.Data.pdb

@@ -27,3 +27,10 @@ F:\test古籍\AncientBook\Common\Common\bin\Debug\Newtonsoft.Json.xml
 F:\test古籍\AncientBook\Common\Common\obj\Debug\Common.dll
 F:\test古籍\AncientBook\Common\Common\obj\Debug\Common.pdb
 F:\test古籍\AncientBook\Common\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+F:\task\古籍\AncientBook\Common\Common\bin\Debug\Common.dll
+F:\task\古籍\AncientBook\Common\Common\bin\Debug\Common.pdb
+F:\task\古籍\AncientBook\Common\Common\bin\Debug\Newtonsoft.Json.dll
+F:\task\古籍\AncientBook\Common\Common\bin\Debug\Newtonsoft.Json.xml
+F:\task\古籍\AncientBook\Common\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+F:\task\古籍\AncientBook\Common\Common\obj\Debug\Common.dll
+F:\task\古籍\AncientBook\Common\Common\obj\Debug\Common.pdb

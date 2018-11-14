@@ -29,3 +29,16 @@ F:\test古籍\AncientBook\AncientBook.Service\bin\Debug\Common.dll
 F:\test古籍\AncientBook\AncientBook.Service\bin\Debug\Newtonsoft.Json.dll
 F:\test古籍\AncientBook\AncientBook.Service\bin\Debug\Common.pdb
 F:\test古籍\AncientBook\AncientBook.Service\bin\Debug\Newtonsoft.Json.xml
+F:\task\古籍\AncientBook\AncientBook.Service\bin\Debug\AncientBook.Service.dll
+F:\task\古籍\AncientBook\AncientBook.Service\bin\Debug\AncientBook.Service.pdb
+F:\task\古籍\AncientBook\AncientBook.Service\bin\Debug\AncientBook.Data.dll
+F:\task\古籍\AncientBook\AncientBook.Service\bin\Debug\Common.dll
+F:\task\古籍\AncientBook\AncientBook.Service\bin\Debug\EntityFramework.dll
+F:\task\古籍\AncientBook\AncientBook.Service\bin\Debug\Newtonsoft.Json.dll
+F:\task\古籍\AncientBook\AncientBook.Service\bin\Debug\AncientBook.Data.pdb
+F:\task\古籍\AncientBook\AncientBook.Service\bin\Debug\Common.pdb
+F:\task\古籍\AncientBook\AncientBook.Service\bin\Debug\EntityFramework.xml
+F:\task\古籍\AncientBook\AncientBook.Service\bin\Debug\Newtonsoft.Json.xml
+F:\task\古籍\AncientBook\AncientBook.Service\obj\Debug\AncientBook.Service.csprojResolveAssemblyReference.cache
+F:\task\古籍\AncientBook\AncientBook.Service\obj\Debug\AncientBook.Service.dll
+F:\task\古籍\AncientBook\AncientBook.Service\obj\Debug\AncientBook.Service.pdb

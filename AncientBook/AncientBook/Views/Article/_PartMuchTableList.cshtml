@@ -198,6 +198,11 @@
                                     <span class="pub chubanzhe">出版者：<em>@Html.Raw(item.Publisher.ToString())</em></span>
                                     <span class="pub chaodai">朝代：<em>@Html.Raw(item.Dynasty.ToString())</em></span>
                                 </p>
+                                <p>
+                                    <span class="pub chubanzhe">出处(49年前)：<em title="@Html.Raw(item.FromAF49.ToString())">@Html.Raw(item.FromAF49.ToString())</em></span>
+                                    <span class="pub chubanzhe">出处(49年后)：<em title="@Html.Raw(item.FromBF49.ToString())">@Html.Raw(item.FromBF49.ToString())</em></span>
+                                    @*<span class="pub chaodai">朝代：<em title="@Html.Raw(item.Dynasty.ToString())">@Html.Raw(item.Dynasty.ToString())</em></span>*@
+                                </p>
                             </div>
                         </div>
                         <div class="lineDashed"></div>
